@@ -21,5 +21,24 @@ def proxy_request():
     with open('proxy_req.txt', encoding='utf-8', mode='w+') as f:
         f.write(soup.prettify())
 
-simple_request()
-proxy_request()
+
+def multiple_requests():
+    sites = ['http://www.slate.com', 'http://www.npr.org', 'http://www.politico.com', 'http://www.nytimes.com',
+             'http://www.huffingtonpost.com', 'http://www.cnn.com', 'http://www.usatoday.com',
+             'http://www.yahoo.com/news/', 'http://www.wsj.com', 'http://www.breitbart.com/big-government/',
+             'http://www.drudgereport.com', 'http://www.foxnews.com', 'http://www.theblaze.com', 'https://apnews.com/',
+             'http://www.bbc.com']
+
+
+
+    for site in sites:
+        response = requests.get(site)
+        soup = BeautifulSoup(response.content, "html.parser")
+        title = soup.title.text
+        links = soup.find_all('a')
+        with open('{}.txt'.format(title), encoding='utf-8', mode='a') as f:
+            for link in links:
+                if link.get('href'):
+                    f.write(link.get('href') + '\n')
+
+multiple_requests()
